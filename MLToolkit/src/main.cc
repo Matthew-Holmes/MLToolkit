@@ -1,7 +1,5 @@
 #include "mltoolkit.h"
 
-
-
 int main() {
 	mltoolkit::Matrix mat(3, 3, 1.0);
 	std::cout << "matrix with size: ";
