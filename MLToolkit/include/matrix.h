@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <stdexcept>
+#include <functional>
 
 namespace mltoolkit {
 
@@ -18,6 +19,17 @@ public:
 		for (int i = 0; i != rows; i++)
 			data.push_back(std::vector<double>(cols, fill));
 	}
+
+	Matrix(int rows, int cols, std::function<double(void)> init_func)
+		: size_pair{ rows, cols } {
+		// constructor that takes an function to randomly generate inputs
+		for (int i = 0; i != rows; i++) {
+			std::vector<double> row;
+			for (int j = 0; j != cols; j++)
+				row.push_back(init_func());
+			data.push_back(row);
+		}
+	}
 	// individual element access - std::vector.at() checks for out_of_range errors
 	double& element_ij(int row, int col) { return (data.at(row)).at(col); }
 	const double& element_ij(int row, int col) const 
@@ -30,6 +42,8 @@ public:
 
 	// arithmetic operations
 	std::vector<double> vec_mult(const std::vector<double>& vec);
+	// transformation option
+	void append_row(std::vector<double> row);
 private:
 	// not const but getters/setters should be for the time being
 	std::pair<int, int> size_pair;

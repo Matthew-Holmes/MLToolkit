@@ -1,6 +1,11 @@
 #include "mltoolkit.h"
 
+#include <cmath>
+
 int main() {
+	auto rand_getter = []() { return (double)rand() / (double)RAND_MAX * 2 - 1; };
+	auto actn_func = [](double d) { return d; };
+	// mltoolkit::Matrix mat(3, 3, rand_getter);
 	mltoolkit::Matrix mat(3, 3, 1.0);
 	std::cout << "matrix with size: ";
 	std::cout << mat.size().first << " " << mat.size().second << std::endl;
@@ -21,6 +26,9 @@ int main() {
 		std::cout << d << " ";
 	}
 	std::cout << std::endl;
+	// neural network testing
+	mltoolkit::NeuralNetwork nnet(std::vector<int>({ 3, 5, 5, 3 }), actn_func, rand_getter);
+
 	int k;
 	std::cin >> k;
 	return 0;

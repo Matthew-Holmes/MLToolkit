@@ -24,6 +24,15 @@ std::vector<double> Matrix::vec_mult(const std::vector<double>& vec) {
 	return out;
 }
 
+void Matrix::append_row(std::vector<double> row)
+{
+	if (row.size() != size_pair.second) {
+		throw std::invalid_argument("appending incompatible row");
+	}
+	data.push_back(row);
+	size_pair.first++;
+}
+
 
 
 
