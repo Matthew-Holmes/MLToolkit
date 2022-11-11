@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <utility>
+#include <stdexcept>
 
 namespace mltoolkit {
 
@@ -26,6 +27,9 @@ public:
 	const std::pair<int, int> size() const { return size_pair; };
 	const int number_of_rows() const { return size_pair.first; };
 	const int number_of_cols() const { return size_pair.second; };
+
+	// arithmetic operations
+	std::vector<double> vec_mult(const std::vector<double>& vec);
 private:
 	// not const but getters/setters should be for the time being
 	std::pair<int, int> size_pair;

@@ -7,12 +7,20 @@ int main() {
 	std::cout << "so " << mat.number_of_rows() << " rows, and " 
 		<< mat.number_of_cols() << " cols" << std::endl;
 	std::cout << "data is: " << std::endl;	
+	mat.element_ij(1, 1) = 0.0;
 	for (int i = 0; i < mat.number_of_rows(); i++) {
 		for (int j = 0; j < mat.number_of_cols(); j++) {
 			std::cout << mat.element_ij(i, j) << " ";
 		}
 		std::cout << std::endl;
 	}
+	std::cout << "testing matrix vector multiplication" << std::endl;
+	std::vector<double> vec{ 1.0, 2.0, 3.0 };
+	vec = mat.vec_mult(vec);
+	for (auto d : vec) {
+		std::cout << d << " ";
+	}
+	std::cout << std::endl;
 	int k;
 	std::cin >> k;
 	return 0;
