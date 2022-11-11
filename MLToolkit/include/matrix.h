@@ -14,14 +14,13 @@ public:
 	Matrix() = default;
 	Matrix(int rows, int cols, double fill = 0.0)
 		: size_pair{ rows, cols } {
-		std::vector<std::vector<double>> data;
 		for (int i = 0; i != rows; i++)
 			data.push_back(std::vector<double>(cols, fill));
 	}
 	// individual element access - std::vector.at() checks for out_of_range errors
-	double& element_ij(int row, int col) { return data.at(row).at(col); }
+	double& element_ij(int row, int col) { return (data.at(row)).at(col); }
 	const double& element_ij(int row, int col) const 
-		{ return data.at(row).at(col); }
+		{ return (data.at(row)).at(col); }
 
 	// matrix size information
 	const std::pair<int, int> size() const { return size_pair; };
@@ -31,7 +30,6 @@ private:
 	// not const but getters/setters should be for the time being
 	std::pair<int, int> size_pair;
 	std::vector<std::vector<double>> data;
-
 };
 
 } // namespace mltoolkit
