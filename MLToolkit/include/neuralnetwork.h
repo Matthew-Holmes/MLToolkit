@@ -20,7 +20,6 @@ public:
 	NeuralNetwork(std::vector<int> top, std::function<double(double)> act,
 		std::function<double(void)> init);
 
-
 	std::vector<double> feed_forward(const std::vector<double>& in_vec);
 private:
 	std::vector<Matrix> weights;

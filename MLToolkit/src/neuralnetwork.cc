@@ -4,7 +4,16 @@ namespace mltoolkit {
 
 std::vector<double> NeuralNetwork::feed_forward(const std::vector<double>& in_vec)
 {
-	return std::vector<double>();
+	std::vector<double> out_vec = in_vec;
+	out_vec.push_back(1.0); // for bias
+	
+	for (const auto& mat : weights) {
+		out_vec = mat.vec_mult(out_vec);
+		for (auto& d : out_vec)
+			d = activation_func(d); // should map to [0,1] interval
+	}
+	out_vec.pop_back();
+	return out_vec;
 }
 
 NeuralNetwork::NeuralNetwork(std::vector<int> top, 

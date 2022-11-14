@@ -2,7 +2,7 @@
 
 namespace mltoolkit {
 
-double& dot(const std::vector<double>& lhs,
+double dot(const std::vector<double>& lhs,
 		    const std::vector<double>& rhs) {
 	if (lhs.size() != rhs.size()) {
 		throw std::invalid_argument("vector sizes differ for dot product");
@@ -13,7 +13,7 @@ double& dot(const std::vector<double>& lhs,
 	}
 	return d;	
 }
-std::vector<double> Matrix::vec_mult(const std::vector<double>& vec) {
+std::vector<double> Matrix::vec_mult(const std::vector<double>& vec) const{
 	if (vec.size() != size_pair.second) {
 		throw std::invalid_argument("matrix incompatible with vector");
 	}

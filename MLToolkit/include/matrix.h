@@ -41,7 +41,7 @@ public:
 	const int number_of_cols() const { return size_pair.second; };
 
 	// arithmetic operations
-	std::vector<double> vec_mult(const std::vector<double>& vec);
+	std::vector<double> vec_mult(const std::vector<double>& vec) const;
 	// transformation option
 	void append_row(std::vector<double> row);
 private:

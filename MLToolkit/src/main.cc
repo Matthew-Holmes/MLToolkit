@@ -26,8 +26,6 @@ int main() {
 		std::cout << d << " ";
 	}
 	std::cout << std::endl;
-	// neural network testing
-	mltoolkit::NeuralNetwork nnet(std::vector<int>({ 3, 5, 5, 3 }), actn_func, rand_getter);
 
 	int k;
 	std::cin >> k;
