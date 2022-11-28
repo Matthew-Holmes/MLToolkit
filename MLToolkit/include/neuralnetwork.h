@@ -15,11 +15,11 @@ namespace mltoolkit {
 // mixed with normalisations - but we have an extra bias term that makes
 // sure every layer gets to do something, even if a zero vector input occurs
 class NeuralNetwork {
+	friend class neuralnetworkmutator;
 public:
 	NeuralNetwork() = default;
 	NeuralNetwork(std::vector<int> top, std::function<double(double)> act,
 		std::function<double(void)> init);
-
 	std::vector<double> feed_forward(const std::vector<double>& in_vec);
 private:
 	std::vector<Matrix> weights;
