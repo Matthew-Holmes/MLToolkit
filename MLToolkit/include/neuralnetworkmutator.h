@@ -9,18 +9,16 @@ namespace mltoolkit {
 
 class NeuralNetworkMutator {
 public:
-	void delta_by_gradient(NeuralNetwork& target, const NeuralNetwork& nn,
-		std::vector<double> last_grad, double scale = 1.0) {
-		// computes the gradient of NeuralNetwork nn given the final gradient
-		// updates target network, which should have the same topology as nn
-		// scale is applied to the gradient before this step
-		if (target.topology != nn.topology)
-			throw std::invalid_argument("target incompatible with operand neural net");
-		// backpropagate
-	}
-private:
+	void delta_by_gradient(
+		NeuralNetwork&,	const NeuralNetwork&,
+		const std::vector<double>&,
+		const std::vector<double>&,
+		std::function<double(double, double)>, 
+		std::function<double(double)>,
+		double);
+	void get_activations(const NeuralNetwork&, const std::vector<double>&);
 	std::vector<std::vector<double>> activations;
-	void prealloc_activations(const NeuralNetwork&);
+//private:
 };
 
 

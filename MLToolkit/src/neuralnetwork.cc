@@ -11,6 +11,7 @@ std::vector<double> NeuralNetwork::feed_forward(const std::vector<double>& in_ve
 		out_vec = mat.vec_mult(out_vec);
 		for (auto& d : out_vec)
 			d = activation_func(d); // should map to [0,1] interval
+		out_vec.back() = 1.0; // preserve bias term
 	}
 	out_vec.pop_back();
 	return out_vec;

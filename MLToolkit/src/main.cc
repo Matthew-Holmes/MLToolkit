@@ -27,6 +27,24 @@ int main() {
 	}
 	std::cout << std::endl;
 
+	std::cout << "testing neural networks" << std::endl;
+	mltoolkit::NeuralNetwork nnet(std::vector<int> {3, 5, 3}, actn_func, rand_getter);
+	auto out = nnet.feed_forward(vec);
+	for (auto d :out) {
+		std::cout << d << " ";
+	}
+	std::cout << std::endl;
+
+
+	std::cout << "testing nnet mutators" << std::endl;
+	mltoolkit::NeuralNetworkMutator nnet_mut;
+	nnet_mut.get_activations(nnet, vec);
+	for (const auto &v : nnet_mut.activations) {
+		for (const auto& d : v)
+			std::cout << d << " ";
+		std::cout << std::endl;
+	}
+
 	int k;
 	std::cin >> k;
 	return 0;
