@@ -24,6 +24,22 @@ std::vector<double> Matrix::vec_mult(const std::vector<double>& vec) const{
 	return out;
 }
 
+std::vector<double> Matrix::vec_mult(const std::vector<double>& vec) const {
+	if (vec.size() != size_pair.first) {
+		throw std::invalid_argument("matrix incompatible with vector");
+	}
+	std::vector<double> out(size_pair.second, 0.0);
+	
+	auto it = vec.begin();
+	for (const auto& row : data) {
+		for (/*  */; i != size_pair.second; i++) {
+			out[i] += row[i] * (*it);
+		}
+		it++;
+	}
+	return out;
+}
+
 void Matrix::append_row(std::vector<double> row)
 {
 	if (row.size() != size_pair.second) {

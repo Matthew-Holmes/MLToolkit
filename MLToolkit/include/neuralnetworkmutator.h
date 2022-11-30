@@ -13,11 +13,15 @@ public:
 		NeuralNetwork&,	const NeuralNetwork&,
 		const std::vector<double>&,
 		const std::vector<double>&,
-		std::function<double(double, double)>, 
-		std::function<double(double)>,
 		double);
 	void get_activations(const NeuralNetwork&, const std::vector<double>&);
+	void set_error_gradient_fn(std::function<double(double, double)> fxy)
+		{ error_gradient = fxy; }
+	void set_act_gradient_fn(std::function<double(double)> fx)
+		{ act_gradient = fx; }
 	std::vector<std::vector<double>> activations;
+	std::function<double(double, double)> error_gradient;
+	std::function<double(double)> act_gradient;
 //private:
 };
 
