@@ -10,10 +10,10 @@ namespace mltoolkit {
 class NeuralNetworkMutator {
 public:
 	void delta_by_gradient(
-		NeuralNetwork&,	const NeuralNetwork&,
-		const std::vector<double>&,
-		const std::vector<double>&,
-		double);
+		NeuralNetwork& target,	const NeuralNetwork& nn,
+		const std::vector<double>& in_vec,
+		const std::vector<double>& correct_out_vec,
+		double scale);
 	void get_activations(const NeuralNetwork&, const std::vector<double>&);
 	void set_error_gradient_fn(std::function<double(double, double)> fxy)
 		{ error_gradient = fxy; }
