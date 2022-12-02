@@ -61,7 +61,7 @@ int main() {
 		std::cout << d << " ";
 	std::cout << std::endl;
 	for (int i = 0; i != 1000; i++) {
-		nnet_mut.delta_by_gradient(nnet, nnet, invec, outvec, 0.05);
+		nnet_mut.delta_by_gradient(nnet, nnet, invec, outvec, -0.05);
 		if (i % 100 == 0) {
 			for (const auto& d : nnet.feed_forward(invec))
 				std::cout << d << " ";

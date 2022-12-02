@@ -25,7 +25,7 @@ void NeuralNetworkMutator::delta_by_gradient(
                     const NeuralNetwork& nn, 
               const std::vector<double>& in_vec,
               const std::vector<double>& correct_out_vec,
-                                  double scale = 1.0) {
+                                  double scale = -1.0) {
 	// computes the gradient of NeuralNetwork nn
 	// given the input in_vec and desired output correct_out_vec
 	// updates target network, which should have the same topology as nn
@@ -59,8 +59,8 @@ void NeuralNetworkMutator::delta_by_gradient(
 			for (int k = 0; k != nn.weights[i].number_of_cols(); k++) {
 				// vector outer product gives the gradient for each entry
 				target.weights[i].element_ij(j, k)
-					-= scale * (activations[i + 1][j] * activations[i][k]);
-				//  -= since gradient DESCENT
+					+= scale * (activations[i + 1][j] * activations[i][k]);
+				//  += for gradient descent use negative scale value
 			} 
 		}
 		// now overwrite activations with error backpropagated

@@ -9,6 +9,7 @@ namespace mltoolkit {
 
 class NeuralNetworkMutator {
 public:
+	// TODO set public debug functions so works with main
 	void delta_by_gradient(
 		NeuralNetwork& target,	const NeuralNetwork& nn,
 		const std::vector<double>& in_vec,
