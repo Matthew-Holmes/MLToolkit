@@ -35,7 +35,7 @@ int main() {
 	std::cout << std::endl;
 
 	std::cout << "testing neural networks" << std::endl;
-	mltoolkit::NeuralNetwork nnet(std::vector<int> {3, 5, 3}, actn_func, rand_getter);
+	mltoolkit::NeuralNetwork nnet(std::vector<int> {3, 5, 10, 5, 3}, actn_func, rand_getter);
 	auto out = nnet.feed_forward(vec);
 	for (auto d :out) {
 		std::cout << d << " ";
@@ -53,21 +53,23 @@ int main() {
 	}
 	std::cout << "tested activations getter" << std::endl;
 	std::cout << "testing gradient descent" << std::endl;
-	std::cout << "testing gradient descent" << std::endl;
-	nnet_mut.set_act_gradient_fn(actn_func);
+	nnet_mut.set_act_gradient_fn(actn_grad);
 	nnet_mut.set_error_gradient_fn(errr_grad);
 	std::vector<double> invec{ 0.2, 0.9, 0.2 };
-	std::vector<double> outvec{ 1.0, 0.0, 0.0 };
+	std::vector<double> outvec{ 0.0, 1.0, 0.0 };
 	for (const auto& d : nnet.feed_forward(invec))
 		std::cout << d << " ";
 	std::cout << std::endl;
-	for (int i = 0; i != 100; i++) {
-		nnet_mut.delta_by_gradient(nnet, nnet, invec, outvec, 0.1);
-		for (const auto& d : nnet.feed_forward(invec))
-			std::cout << d << " ";
-		std::cout << std::endl;
+	for (int i = 0; i != 1000; i++) {
+		nnet_mut.delta_by_gradient(nnet, nnet, invec, outvec, 0.05);
+		if (i % 100 == 0) {
+			for (const auto& d : nnet.feed_forward(invec))
+				std::cout << d << " ";
+			std::cout << std::endl;
+		}
 	}
-
+	std::cout << "tested gradient descent" << std::endl;
+	nnet;
 	int k;
 	std::cin >> k;
 	return 0;
