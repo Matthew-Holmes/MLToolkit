@@ -69,7 +69,19 @@ int main() {
 		}
 	}
 	std::cout << "tested gradient descent" << std::endl;
-	nnet;
+
+
+	std::cout << "testing input from datafile" << std::endl;
+	mltoolkit::FileData filedat("C:/Users/Matthew/Documents/Work/Coding/CPProjects/MLTookit/MLToolkit/data/testdata.txt"); // TODO work out how to get files outside director
+	mltoolkit::Data::datumtype datum;
+	using mltoolkit::operator<<; // so less clunky output
+	while (filedat >> datum) {
+		std::cout << "next datum:" << std::endl;
+		std::cout << datum << std::endl;
+	}
+
+	std::cout << "tested input from datafile" << std::endl;
+
 	int k;
 	std::cin >> k;
 	return 0;

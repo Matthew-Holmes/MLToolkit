@@ -12,7 +12,10 @@ namespace mltoolkit {
 
 class FileData : public Data {
 public:
-	FileData(std::string fname, char d = ',') : fin(fname), delim(d) {}
+	FileData(std::string fname, char d = ',') : fin(fname), delim(d) { 
+		if (!fin.is_open())
+			std::cout << "failed to open file" << std::endl;
+	}
 	~FileData() { fin.close(); } // don't override here; will call ~Data() next
 private:
 	bool past_last() const override { return fin ? true : false; }
@@ -26,8 +29,10 @@ private:
 
 Data::datumtype FileData::get_next() {
 	std::string line;
-	if (!getline(fin, line))
+	if (!std::getline(fin, line))
+	{
 		return datumtype(std::vector<double>(), std::vector<double>());
+	}
 	// off end of file, return empty datum
 	std::istringstream linestream(line);
 	
