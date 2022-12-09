@@ -36,7 +36,7 @@ int main() {
 
 	std::cout << "testing neural networks" << std::endl;
 	mltoolkit::NeuralNetwork nnet(std::vector<int> {3, 5, 10, 5, 3}, actn_func, rand_getter);
-	auto out = nnet.feed_forward(vec);
+	auto out = nnet.predict(vec);
 	for (auto d :out) {
 		std::cout << d << " ";
 	}
@@ -57,13 +57,13 @@ int main() {
 	nnet_mut.set_error_gradient_fn(errr_grad);
 	std::vector<double> invec{ 0.2, 0.9, 0.2 };
 	std::vector<double> outvec{ 0.0, 1.0, 0.0 };
-	for (const auto& d : nnet.feed_forward(invec))
+	for (const auto& d : nnet.predict(invec))
 		std::cout << d << " ";
 	std::cout << std::endl;
 	for (int i = 0; i != 1000; i++) {
 		nnet_mut.delta_by_gradient(nnet, nnet, invec, outvec, -0.05);
 		if (i % 100 == 0) {
-			for (const auto& d : nnet.feed_forward(invec))
+			for (const auto& d : nnet.predict(invec))
 				std::cout << d << " ";
 			std::cout << std::endl;
 		}
@@ -72,7 +72,7 @@ int main() {
 
 
 	std::cout << "testing input from datafile" << std::endl;
-	mltoolkit::FileData filedat("C:/Users/Matthew/Documents/Work/Coding/CPProjects/MLTookit/MLToolkit/data/testdata.txt"); // TODO work out how to get files outside director
+	mltoolkit::FileData filedat("C:/Users/Matthew/Documents/Work/Coding/CPProjects/MLTookit/MLToolkit/data/testdata.txt");
 	mltoolkit::Data::datumtype datum;
 	using mltoolkit::operator<<; // so less clunky output
 	while (filedat >> datum) {

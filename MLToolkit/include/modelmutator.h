@@ -1,0 +1,20 @@
+#ifndef MLTOOLKIT_MODELMUTATOR_H
+#define MLTOOLKIT_MODELMUTATOR_H
+
+#include "data.h"
+#include "model.h"
+
+namespace mltoolkit {
+
+template <typename MOD>
+class ModelMutator {
+public:
+	virtual ~ModelMutator() = default;
+	virtual void training_mutate(
+		MOD& M, const Data::datumtype& in_out_vec_pair) = 0;
+};
+
+
+}
+
+#endif

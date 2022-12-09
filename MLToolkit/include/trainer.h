@@ -19,9 +19,8 @@ public:
 private:
 	Model mod; // TODO make base class
 	ModelMutator mod_mut; // TODO make base class
-	Data train_data; // TODO make Data class
+	Data train_data;
 	Data test_data;
-
 };
 
 

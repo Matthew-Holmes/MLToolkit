@@ -4,12 +4,16 @@
 #define MLTOOLKIT_INCLUDE_NEURALNETWORKMUTATOR_H_
 
 #include "neuralnetwork.h"
+#include "modelmutator.h"
 
 namespace mltoolkit {
 
-class NeuralNetworkMutator {
+class NeuralNetworkMutator : public ModelMutator<NeuralNetwork> {
 public:
-	// TODO set public debug functions so works with main
+	// TODO constructor
+
+	void training_mutate(
+		NeuralNetwork& nnet, const Data::datumtype& in_out_vec_pair) override;
 	void delta_by_gradient(
 		NeuralNetwork& target,	const NeuralNetwork& nn,
 		const std::vector<double>& in_vec,
@@ -20,10 +24,12 @@ public:
 		{ error_gradient = fxy; }
 	void set_act_gradient_fn(std::function<double(double)> fx)
 		{ act_gradient = fx; }
+	void set_learning_rate(double d) { learning_rate = d; }
 	std::vector<std::vector<double>> activations;
+private:
 	std::function<double(double, double)> error_gradient;
 	std::function<double(double)> act_gradient;
-//private:
+	double learning_rate = 0.1;
 };
 
 

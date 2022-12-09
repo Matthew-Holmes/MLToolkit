@@ -2,6 +2,11 @@
 
 namespace mltoolkit {
 
+void NeuralNetworkMutator::training_mutate(
+	NeuralNetwork& nnet, const Data::datumtype& vec_pair) {
+	delta_by_gradient(nnet, nnet, vec_pair.first, vec_pair.second, -learning_rate);
+}
+
 void NeuralNetworkMutator::get_activations(
 	const NeuralNetwork& nn, const std::vector<double>& in_vec) {
 
