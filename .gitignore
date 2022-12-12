@@ -1,5 +1,6 @@
 .vs/
 build/
+data/datasets/
 CMakeSettings.json
 
 # Prerequisites
