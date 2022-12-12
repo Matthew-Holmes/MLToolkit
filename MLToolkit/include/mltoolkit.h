@@ -9,5 +9,6 @@
 #include "neuralnetworkmutator.h"
 #include "data.h"
 #include "filedata.h"
+#include "trainer.h"
 
 #endif 

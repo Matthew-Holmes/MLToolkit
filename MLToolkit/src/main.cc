@@ -4,16 +4,16 @@
 
 int main() {
 	auto rand_getter = []() { return (double)rand() / (double)RAND_MAX * 2 - 1; };
-	auto actn_func = [] (double d) { return 1.0 / (1 + std::exp(-d)); };
-	auto actn_grad = [actn_func] (double d) { return actn_func(d) * (1 - actn_func(d)); };
+	auto actn_func = [](double d) { return 1.0 / (1 + std::exp(-d)); };
+	auto actn_grad = [actn_func](double d) { return actn_func(d) * (1 - actn_func(d)); };
 	auto errr_grad = [](double d1, double d2) { return 2 * (d1 - d2); };
 	// mltoolkit::Matrix mat(3, 3, rand_getter);
 	mltoolkit::Matrix mat(3, 3, 1.0);
 	std::cout << "matrix with size: ";
 	std::cout << mat.size().first << " " << mat.size().second << std::endl;
-	std::cout << "so " << mat.number_of_rows() << " rows, and " 
+	std::cout << "so " << mat.number_of_rows() << " rows, and "
 		<< mat.number_of_cols() << " cols" << std::endl;
-	std::cout << "data is: " << std::endl;	
+	std::cout << "data is: " << std::endl;
 	mat.element_ij(1, 1) = 0.0;
 	for (int i = 0; i < mat.number_of_rows(); i++) {
 		for (int j = 0; j < mat.number_of_cols(); j++) {
@@ -37,7 +37,7 @@ int main() {
 	std::cout << "testing neural networks" << std::endl;
 	mltoolkit::NeuralNetwork nnet(std::vector<int> {3, 5, 10, 5, 3}, actn_func, rand_getter);
 	auto out = nnet.predict(vec);
-	for (auto d :out) {
+	for (auto d : out) {
 		std::cout << d << " ";
 	}
 	std::cout << std::endl;
@@ -46,7 +46,7 @@ int main() {
 	std::cout << "testing nnet mutators" << std::endl;
 	mltoolkit::NeuralNetworkMutator nnet_mut;
 	nnet_mut.compute_activations(nnet, vec);
-	for (const auto &v : nnet_mut.get_activations()) {
+	for (const auto& v : nnet_mut.get_activations()) {
 		for (const auto& d : v)
 			std::cout << d << " ";
 		std::cout << std::endl;
@@ -76,6 +76,13 @@ int main() {
 	mltoolkit::Data::datumtype datum;
 	using mltoolkit::operator<<; // so less clunky output
 	while (filedat >> datum) {
+		std::cout << "next datum:" << std::endl;
+		std::cout << datum << std::endl;
+	}
+
+	std::cout << "testing input from mnist datafile" << std::endl;
+	mltoolkit::FileData mnist_train("C:/Users/Matthew/Documents/Work/Coding/CPProjects/MLTookit/MLToolkit/data/datasets/mnist_train_formatted.txt");
+	while (mnist_train >> datum) {
 		std::cout << "next datum:" << std::endl;
 		std::cout << datum << std::endl;
 	}
