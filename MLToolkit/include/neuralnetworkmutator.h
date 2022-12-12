@@ -10,28 +10,40 @@ namespace mltoolkit {
 
 class NeuralNetworkMutator : public ModelMutator<NeuralNetwork> {
 public:
-	// TODO constructor
+	typedef std::function<double(double, double)> xyfunc;
+	typedef std::function<double(double)>         xfunc;
 
-	void training_mutate(
-		NeuralNetwork& nnet, const Data::datumtype& in_out_vec_pair) override;
+	NeuralNetworkMutator(xyfunc fxy = meansquared_grad, xfunc fx = logistic_func, double d = 0.05)
+		: error_gradient(fxy), act_gradient(fx), learning_rate(d) {}
+
 	void delta_by_gradient(
-		NeuralNetwork& target,	const NeuralNetwork& nn,
+		NeuralNetwork& target, const NeuralNetwork& nn,
 		const std::vector<double>& in_vec,
 		const std::vector<double>& correct_out_vec,
 		double scale);
-	void get_activations(const NeuralNetwork&, const std::vector<double>&);
-	void set_error_gradient_fn(std::function<double(double, double)> fxy)
+
+	void training_mutate(
+		NeuralNetwork& nnet, const Data::datumtype& in_out_vec_pair) override;
+
+	void compute_activations(const NeuralNetwork&, const std::vector<double>&);
+	std::vector<std::vector<double>> get_activations() { return activations; }
+
+	void set_error_gradient_fn(xyfunc fxy)
 		{ error_gradient = fxy; }
-	void set_act_gradient_fn(std::function<double(double)> fx)
+	void set_act_gradient_fn(xfunc fx)
 		{ act_gradient = fx; }
 	void set_learning_rate(double d) { learning_rate = d; }
-	std::vector<std::vector<double>> activations;
 private:
-	std::function<double(double, double)> error_gradient;
-	std::function<double(double)> act_gradient;
+	xyfunc error_gradient;
+	xfunc act_gradient;
 	double learning_rate = 0.1;
-};
 
+	static xyfunc meansquared_grad;
+	static xfunc logistic_func;
+	static xfunc logistic_grad;
+
+	std::vector<std::vector<double>> activations;
+};
 
 } // namespace mltoolkit
 

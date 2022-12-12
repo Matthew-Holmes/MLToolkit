@@ -2,12 +2,29 @@
 
 namespace mltoolkit {
 
+NeuralNetworkMutator::xyfunc 
+NeuralNetworkMutator::meansquared_grad 
+= [] (double d1, double d2) { return 2 * (d1 - d2); };
+
+NeuralNetworkMutator::xfunc
+NeuralNetworkMutator::logistic_func 
+= [] (double d) { return 1.0 / (1 + std::exp(-d)); };
+
+NeuralNetworkMutator::xfunc 
+NeuralNetworkMutator::logistic_grad
+= [] (double d) { return (1.0 / (1 + std::exp(-d))) 
+					   * (1 - ( 1.0 / (1 + std::exp(-d)) )); };
+
+
+//auto actn_grad = [actn_func](double d) { return actn_func(d) * (1 - actn_func(d)); };
+
+
 void NeuralNetworkMutator::training_mutate(
 	NeuralNetwork& nnet, const Data::datumtype& vec_pair) {
 	delta_by_gradient(nnet, nnet, vec_pair.first, vec_pair.second, -learning_rate);
 }
 
-void NeuralNetworkMutator::get_activations(
+void NeuralNetworkMutator::compute_activations(
 	const NeuralNetwork& nn, const std::vector<double>& in_vec) {
 
 	activations.clear();
@@ -45,9 +62,9 @@ void NeuralNetworkMutator::delta_by_gradient(
 		throw std::invalid_argument(
 			"input or output vectors wrong sizes");
 
-	get_activations(nn, in_vec); // get nodewise activations
-	// last layer error contribution
-	// includes error gradient
+	compute_activations(nn, in_vec); // get nodewise activations
+
+	// last layer error contribution - includes error gradient
 	for (int i = 0; i != correct_out_vec.size(); i++) {
 		activations.back()[i] = error_gradient(activations.back()[i], correct_out_vec[i]);
 		activations.back()[i] *= act_gradient(activations.back()[i]);

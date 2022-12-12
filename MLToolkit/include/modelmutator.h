@@ -8,6 +8,7 @@ namespace mltoolkit {
 
 template <typename MOD>
 class ModelMutator {
+	friend MOD;
 public:
 	virtual ~ModelMutator() = default;
 	virtual void training_mutate(

@@ -1,24 +1,24 @@
 #ifndef MLTOOLKIT_TRAINER_H
 #define MLTOOLKIT_TRAINER_H
 
-#include "neuralnetwork.h"
-#include "neuralnetworkmutator.h"
+#include "model.h"
+#include "modelmutator.h"
+#include "data.h"
 
 #include <utility>
 
 namespace mltoolkit {
 
-class Data;
-class Model;
-class ModelMutator;
-
+template <typename MOD>
 class Trainer {
 public:
+	Trainer(MOD mod, ModelMutator<MOD> mod_mut, Data train, Data test)
+		: model(mod), model_mut(mod_mut), train_data(train), test_data(test) {}
 	void do_training(); // TODO 
 	void evaluate(); // TODO
 private:
-	Model mod; // TODO make base class
-	ModelMutator mod_mut; // TODO make base class
+	MOD model;
+	ModelMutator<MOD> model_mut;
 	Data train_data;
 	Data test_data;
 };

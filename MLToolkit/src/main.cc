@@ -45,8 +45,8 @@ int main() {
 
 	std::cout << "testing nnet mutators" << std::endl;
 	mltoolkit::NeuralNetworkMutator nnet_mut;
-	nnet_mut.get_activations(nnet, vec);
-	for (const auto &v : nnet_mut.activations) {
+	nnet_mut.compute_activations(nnet, vec);
+	for (const auto &v : nnet_mut.get_activations()) {
 		for (const auto& d : v)
 			std::cout << d << " ";
 		std::cout << std::endl;
