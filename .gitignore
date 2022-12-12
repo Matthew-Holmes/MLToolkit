@@ -1,7 +1,10 @@
 .vs/
 build/
-data/datasets/
+datasets/
 CMakeSettings.json
+
+# Jupyter junk
+.ipynb_checkpoints/
 
 # Prerequisites
 *.d

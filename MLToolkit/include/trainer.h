@@ -6,6 +6,7 @@
 #include "data.h"
 
 #include <utility>
+#include <iostream>
 
 namespace mltoolkit {
 
@@ -14,8 +15,8 @@ class Trainer {
 public:
 	Trainer(MOD mod, ModelMutator<MOD> mod_mut, Data train, Data test)
 		: model(mod), model_mut(mod_mut), train_data(train), test_data(test) {}
-	void do_training(); // TODO 
-	void evaluate(); // TODO
+	void do_training();
+	void evaluate();
 private:
 	MOD model;
 	ModelMutator<MOD> model_mut;
