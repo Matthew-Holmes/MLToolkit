@@ -89,6 +89,23 @@ int main() {
 
 	std::cout << "tested input from datafile" << std::endl;
 
+	std::cout << "testing Trainer class" << std::endl;
+	mltoolkit::NeuralNetwork mnist_nnet(std::vector<int> {784, 100, 50, 10}, actn_func, rand_getter);
+	std::string train_str = "C:/Users/Matthew/Documents/Work/Coding/CPProjects/MLTookit/MLToolkit/data/datasets/mnist_train_formatted.txt";
+	std::string test_str = "C:/Users/Matthew/Documents/Work/Coding/CPProjects/MLTookit/MLToolkit/data/datasets/mnist_test_formatted.txt";
+	// we'll use default mutator
+	mltoolkit::Trainer<mltoolkit::NeuralNetwork> trainer(mnist_nnet,
+		std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData(train_str)),
+		std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData(test_str)));
+	trainer.set_it_limit(100);
+
+	// define the class?
+	trainer.do_training();
+	//trainer.evaluate();
+
+	std::cout << "tested Trainer class" << std::endl;
+
+
 	int k;
 	std::cin >> k;
 	return 0;
