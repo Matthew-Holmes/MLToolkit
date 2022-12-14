@@ -54,10 +54,11 @@ void Trainer<MOD>::evaluate() {
 
 	while (*test_data_uptr >> test_pair && cnt < it_limit) {
 		predicted = model.predict(test_pair.first);
-		for (it1 = predicted.begin(), it2 = test_pair.second.begin();
-			it1 != predicted.end();
-			it1++, it2++) {
+		auto it1 = predicted.begin();
+		auto it2 = test_pair.second.begin();
+		while (	it1 != predicted.end()) {
 			total_error += (*it1 - *it2) * (*it1 - *it2);
+			it1++; it2++;
 		}
 		cnt++;
 	}

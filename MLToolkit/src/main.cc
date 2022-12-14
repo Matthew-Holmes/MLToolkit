@@ -82,10 +82,8 @@ int main() {
 
 	std::cout << "testing input from mnist datafile" << std::endl;
 	mltoolkit::FileData mnist_train("C:/Users/Matthew/Documents/Work/Coding/CPProjects/MLTookit/MLToolkit/data/datasets/mnist_train_formatted.txt");
-	while (mnist_train >> datum) {
-		std::cout << "next datum:" << std::endl;
-		std::cout << datum << std::endl;
-	}
+	mnist_train >> datum;
+	std::cout << datum << std::endl;
 
 	std::cout << "tested input from datafile" << std::endl;
 
@@ -99,9 +97,23 @@ int main() {
 		std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData(test_str)));
 	trainer.set_it_limit(100);
 
+	std::cout << "testing over 100 iterations" << std::endl;
+#
 	// define the class?
 	trainer.do_training();
-	//trainer.evaluate();
+	trainer.evaluate();
+	trainer.evaluate();
+	trainer.evaluate();
+
+	std::cout << "testing over 10000 iterations" << std::endl;
+
+	trainer.set_it_limit(1000);
+	trainer.do_training();
+	trainer.set_it_limit(100);
+	trainer.evaluate();
+	trainer.evaluate();
+	trainer.evaluate();
+
 
 	std::cout << "tested Trainer class" << std::endl;
 
