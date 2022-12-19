@@ -38,3 +38,4 @@ CMakeSettings.json
 *.exe
 *.out
 *.app
+/MLToolkit/lib/googletest

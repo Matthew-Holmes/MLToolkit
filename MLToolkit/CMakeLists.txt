@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
-
 project(MLToolkit VERSION 1.0)
 
-add_executable(MLToolkit src/main.cc src/matrix.cc src/neuralnetwork.cc src/neuralnetworkmutator.cc src/data.cc src/filedata.cc  "include/model.h" "include/modelmutator.h")
-target_include_directories(MLToolkit
-	PRIVATE
-	include/)
+set(CMAKE_CXX_STANDARD 14)
+
+include_directories(include)
+
+add_subdirectory(src)
+#add_subdirectory(test)
+#add_subdirectory(lib/googletest)
