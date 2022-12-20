@@ -1,0 +1,8 @@
+
+
+add_executable(MLToolkit_test main.cc)
+
+add_test(NAME MLToolkit_test COMMAND MLToolkit_test)
+#         | name of added test         | executable target to run at command line
+
+target_link_libraries(MLToolkit_test PUBLIC MLToolkit_lib gtest)
