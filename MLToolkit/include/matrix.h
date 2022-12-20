@@ -14,8 +14,10 @@ namespace mltoolkit {
 class Matrix {
 public:
 	Matrix() = default;
-	Matrix(int rows, int cols, double fill = 0.0)
+	explicit Matrix(int rows, int cols, double fill = 0.0)
 		: size_pair{ rows, cols } {
+		if (rows < 0 || cols < 0)
+			throw std::invalid_argument("received negative value");
 		for (int i = 0; i != rows; i++)
 			data.push_back(std::vector<double>(cols, fill));
 	}

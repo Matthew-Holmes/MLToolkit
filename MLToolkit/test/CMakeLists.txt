@@ -1,6 +1,6 @@
 
 
-add_executable(MLToolkit_test main.cc test_test.cc)
+add_executable(MLToolkit_test main.cc test_test.cc matrix_test.cc)
 
 add_test(NAME MLToolkit_test COMMAND MLToolkit_test)
 #         | name of added test         | executable target to run at command line
