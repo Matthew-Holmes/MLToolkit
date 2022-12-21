@@ -44,7 +44,7 @@ public:
 		char c;
 		//std::thread cin_thread([&c]() { std::cin.get(c); std::cin.putback(c); return; });
 		std::thread cin_thread([&c]() { c = std::cin.peek(); return; });
-		cin_thread.detach()s // TODO maybe flush buffer after this?
+		cin_thread.detach(); // TODO maybe flush buffer after this?
 		// little thread to keep input ameanable to cin input, puts it back once its got something
 		while (!done) {
 			if (std::cin.rdbuf()->in_avail() == 0 || std::cin.peek() == '\n') {
