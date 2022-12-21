@@ -41,16 +41,28 @@ public:
 	ListenerTask() = delete;
 	ListenerTask(bool& b) : done(b) {};
 	void operator() () const {
-		std::string i;
-		//while (std::cin.rdbuf()->in_avail() == 0 || std::cin.peek() == '\n') {
-		//	if (done) return; 
-			// std::cout << "x";
-		//	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		//}
-		while (std::cin >> i && !done) {
-			std::cout << "you entered: " << i << std::endl;
-			if (i == "q") return;
+		char c;
+		//std::thread cin_thread([&c]() { std::cin.get(c); std::cin.putback(c); return; });
+		std::thread cin_thread([&c]() { c = std::cin.peek(); return; });
+		cin_thread.detach()s // TODO maybe flush buffer after this?
+		// little thread to keep input ameanable to cin input, puts it back once its got something
+		while (!done) {
+			if (std::cin.rdbuf()->in_avail() == 0 || std::cin.peek() == '\n') {
+				if (done) return;
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				// std::cout << "x";
+			}
+			else {
+				std::cout << "buffer got stuff" << std::endl;
+				if (std::cin >> c && !done) {
+					std::cout << "you entered: " << c << std::endl;
+					if (c == 'q') return;
+				}
+			}
 		}
+		// std::cin.putback('q'); 
+		//std::cin.rdbuf()->sputc('x'); 
+		//cin_thread.join();
 	}
 private:
 	bool& done;
@@ -70,7 +82,7 @@ void Trainer<MOD>::do_training() {
 			model_mut.training_mutate(model, in_out_vecs);
 		}
 	std::cout << "trained for " << cnt << " iterations" << std::endl;
-	done = true; std::cin.rdbuf()->sputc('q');
+	done = true;
 	listening_thread.join();
 }
 

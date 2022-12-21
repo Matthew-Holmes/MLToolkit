@@ -105,9 +105,9 @@ int main() {
 	trainer.evaluate();
 	trainer.evaluate();
 
-	std::cout << "running Trainer class with over 10000 iteration max train, 100 test" << std::endl;
+	std::cout << "running Trainer class with over 1000 iteration max train, 100 test" << std::endl;
 
-	trainer.set_it_limit(10000);
+	trainer.set_it_limit(1000);
 	trainer.do_training();
 	trainer.set_it_limit(100);
 	trainer.evaluate();
