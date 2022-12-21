@@ -97,7 +97,7 @@ int main() {
 		std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData(test_str)));
 	trainer.set_it_limit(100);
 
-	std::cout << "testing over 100 iterations" << std::endl;
+	std::cout << "running Trainer class with over 100 iteration max" << std::endl;
 #
 	// define the class?
 	trainer.do_training();
@@ -105,9 +105,9 @@ int main() {
 	trainer.evaluate();
 	trainer.evaluate();
 
-	std::cout << "testing over 10000 iterations" << std::endl;
+	std::cout << "running Trainer class with over 10000 iteration max train, 100 test" << std::endl;
 
-	trainer.set_it_limit(1000);
+	trainer.set_it_limit(10000);
 	trainer.do_training();
 	trainer.set_it_limit(100);
 	trainer.evaluate();

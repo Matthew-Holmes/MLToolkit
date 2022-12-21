@@ -8,6 +8,9 @@
 #include <utility>
 #include <iostream>
 #include <memory>
+#include <thread>
+#include <chrono>
+
 
 namespace mltoolkit {
 
@@ -32,17 +35,43 @@ private:
 	int it_limit;
 };
 
+class ListenerTask
+{
+public:
+	ListenerTask() = delete;
+	ListenerTask(bool& b) : done(b) {};
+	void operator() () const {
+		std::string i;
+		//while (std::cin.rdbuf()->in_avail() == 0 || std::cin.peek() == '\n') {
+		//	if (done) return; 
+			// std::cout << "x";
+		//	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		//}
+		while (std::cin >> i && !done) {
+			std::cout << "you entered: " << i << std::endl;
+			if (i == "q") return;
+		}
+	}
+private:
+	bool& done;
+};
+
 
 template <typename MOD>
 void Trainer<MOD>::do_training() {
 	// todo generalise for input/output values
 	std::pair<std::vector<double>, std::vector<double>> in_out_vecs;
+	// TODO another thread that leaves input open to get a feedback on the model performance
+	bool done = false; ListenerTask l(done);
+	std::thread listening_thread(l);
 	int cnt = 0;
 		while (*train_data_uptr >> in_out_vecs && cnt < it_limit) {
 			cnt++;
 			model_mut.training_mutate(model, in_out_vecs);
 		}
 	std::cout << "trained for " << cnt << " iterations" << std::endl;
+	done = true; std::cin.rdbuf()->sputc('q');
+	listening_thread.join();
 }
 
 template <typename MOD>
@@ -65,6 +94,8 @@ void Trainer<MOD>::evaluate() {
 	std::cout << "evaluated on " << cnt << " datapoints" << std::endl;
 	std::cout << "average MSE: " << total_error / (predicted.size() * cnt) << std::endl;
 }
+
+
 
 
 
