@@ -50,7 +50,25 @@ void Matrix::append_row(std::vector<double> row)
 	size_pair.first++;
 }
 
+double Matrix::sum_elements() const {
+	double sum = 0.0;
+	for (int i = 0; i != number_of_rows(); i++) {
+		for (int j = 0; j != number_of_cols(); j++) {
+			sum += element_ij(i, j);
+		}
+	}
+	return sum;
+}
 
+double Matrix::sum_of_squared_elements() const {
+	double sum = 0.0;
+	for (int i = 0; i != number_of_rows(); i++) {
+		for (int j = 0; j != number_of_cols(); j++) {
+			sum += element_ij(i, j) * element_ij(i,j);
+		}
+	}
+	return sum;
+}
 
 
 } // namespace mltoolkit
