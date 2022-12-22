@@ -181,6 +181,37 @@ TEST(MatrixConstructor, FillConstructorEdgeCases) {
     }
 }
 
+TEST(MatrixCumulation, Sums) {
+    mltoolkit::Matrix blank(5, 5);
+    mltoolkit::Matrix empty(0, 0, 1.0);
+    mltoolkit::Matrix scalar(1, 1, 5);
+    mltoolkit::Matrix row(1, 10, 0.1);
+    mltoolkit::Matrix col(5, 1, -3.0);
+    mltoolkit::Matrix square(5, 5, 0.2);
+    mltoolkit::Matrix rectangle(3, 7, 10.0);
+    mltoolkit::Matrix big(100, 200, -0.001);
+    double eps = 0.0001;
+    ASSERT_NEAR(blank.sum_elements(), 0.0, eps);
+    ASSERT_NEAR(empty.sum_elements(), 0.0, eps);
+    ASSERT_NEAR(scalar.sum_elements(), 5.0, eps);
+    ASSERT_NEAR(row.sum_elements(), 1.0, eps);
+    ASSERT_NEAR(col.sum_elements(), -15.0, eps);
+    ASSERT_NEAR(square.sum_elements(), 5.0, eps);
+    ASSERT_NEAR(rectangle.sum_elements(), 210.0, eps);
+    ASSERT_NEAR(big.sum_elements(), -20.0, eps);
+    ASSERT_NEAR(blank.sum_of_squared_elements(), 0.0, eps);
+    ASSERT_NEAR(empty.sum_of_squared_elements(), 0.0, eps);
+    ASSERT_NEAR(scalar.sum_of_squared_elements(), 25.0, eps);
+    ASSERT_NEAR(row.sum_of_squared_elements(), 0.1, eps);
+    ASSERT_NEAR(col.sum_of_squared_elements(), 45.0, eps);
+    ASSERT_NEAR(square.sum_of_squared_elements(), 1.0, eps);
+    ASSERT_NEAR(rectangle.sum_of_squared_elements(), 2100.0, eps);
+    ASSERT_NEAR(big.sum_of_squared_elements(), 0.02, eps);    
+}
+
+
+
 TEST(MatrixConstructor, InitFuncConstructor) {
 
 }
+
