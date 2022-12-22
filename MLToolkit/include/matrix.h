@@ -14,6 +14,7 @@ namespace mltoolkit {
 class Matrix {
 public:
 	Matrix() = default;
+	Matrix(double rows, double cols, double fill = 0.0) = delete;
 	explicit Matrix(int rows, int cols, double fill = 0.0)
 		: size_pair{ rows, cols } {
 		if (rows < 0 || cols < 0)
@@ -21,7 +22,6 @@ public:
 		for (int i = 0; i != rows; i++)
 			data.push_back(std::vector<double>(cols, fill));
 	}
-
 	Matrix(int rows, int cols, std::function<double(void)> init_func)
 		: size_pair{ rows, cols } {
 		// constructor that takes an function to randomly generate inputs
@@ -32,6 +32,7 @@ public:
 			data.push_back(row);
 		}
 	}
+
 	// individual element access - std::vector.at() checks for out_of_range errors
 	double& element_ij(int row, int col) { return (data.at(row)).at(col); }
 	const double& element_ij(int row, int col) const 
@@ -45,6 +46,13 @@ public:
 	// arithmetic operations
 	std::vector<double> vec_mult(const std::vector<double>&) const;
 	std::vector<double> transpose_vec_mult(const std::vector<double>&) const;
+	// cumulation operations
+	double sum_elements() const;
+	double sum_of_squared_elements() const;
+	unsigned long long number_of_elements() const 
+	{ return unsigned long long(size_pair.first) 
+		   * unsigned long long(size_pair.second); } 
+
 	// transformation option
 	void append_row(std::vector<double> row);
 private:
