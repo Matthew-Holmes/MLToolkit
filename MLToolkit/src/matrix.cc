@@ -13,6 +13,7 @@ double dot(const std::vector<double>& lhs,
 	}
 	return d;	
 }
+
 std::vector<double> Matrix::vec_mult(const std::vector<double>& vec) const{
 	if (vec.size() != size_pair.second) {
 		throw std::invalid_argument("matrix incompatible with vector");
