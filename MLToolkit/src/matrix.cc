@@ -51,16 +51,34 @@ void Matrix::append_row(std::vector<double> row)
 }
 
 double Matrix::sum_elements() const {
-	double sum = 0.0;
-	for (int i = 0; i != number_of_rows(); i++) {
-		for (int j = 0; j != number_of_cols(); j++) {
-			sum += element_ij(i, j);
+	double sum = std::reduce(std::execution::seq, data.cbegin(), data.cend(), 0.0,
+		[](double d, const std::vector<double>& v)
+		{
+			return d + std::reduce(std::execution::par, v.cbegin(), v.cend(), 0.0, std::plus<double>());
 		}
-	}
+	); 
 	return sum;
+	/*
+	std::vector<double> partials;
+	for (auto it = data.cbegin(); it != data.cend(); it++) {
+		double d = std::reduce(std::execution::seq, it->cbegin(), it->cend(), 0.0, std::plus<double>());
+		partials.push_back(d);
+
+	}
+	return std::reduce(std::execution::seq, partials.cbegin(), partials.cend(), 0.0, std::plus<double>());
+	*/
 }
 
 double Matrix::sum_of_squared_elements() const {
+	mltoolkit::Matrix tmp = *this;
+	// lambda to square all elements in a matrix
+	auto sqr_elts = [](std::vector<double>& v) 
+	{ 
+		std::for_each(v.begin(), v.end(), [](double& d) {d *= d; }); return; 
+	};
+	std::for_each(tmp.data.begin(), tmp.data.end(), sqr_elts);
+	return tmp.sum_elements();
+	/*
 	double sum = 0.0;
 	for (int i = 0; i != number_of_rows(); i++) {
 		for (int j = 0; j != number_of_cols(); j++) {
@@ -68,6 +86,7 @@ double Matrix::sum_of_squared_elements() const {
 		}
 	}
 	return sum;
+	*/
 }
 
 

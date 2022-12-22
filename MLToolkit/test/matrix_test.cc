@@ -10,6 +10,7 @@ TEST(MatrixConstructor, DefaultConstructor) {
     EXPECT_ANY_THROW(emptyMat.element_ij(0, 0));
 }
 
+
 void check_entries(mltoolkit::Matrix& mat,
     int rows, int cols, double fill) {
     int i = 0, j = 0; // so can use one incremented past allowed range
@@ -22,6 +23,8 @@ void check_entries(mltoolkit::Matrix& mat,
     ASSERT_ANY_THROW(mat.element_ij(i, 0));
     EXPECT_ANY_THROW(mat.element_ij(i, j));
 }
+
+
 
 TEST(MatrixConstructor, SizeConstructor) {
     // expects 0.0 in every entry
@@ -43,6 +46,7 @@ TEST(MatrixConstructor, SizeConstructor) {
     check_entries(rectangle, 3, 7, 0.0);
     check_entries(big, 100, 200, 0.0);  
 }
+
 
 TEST(MatrixConstructor, SizeConstructorEdgeCases) {
     try {
@@ -117,6 +121,7 @@ TEST(MatrixConstructor, SizeConstructorEdgeCases) {
     */
 }
 
+
 TEST(MatrixConstructor, FillConstructor) {
     // expects 0.0 in every entry
     mltoolkit::Matrix empty(0, 0, 1.6);
@@ -190,6 +195,9 @@ TEST(MatrixCumulation, Sums) {
     mltoolkit::Matrix square(5, 5, 0.2);
     mltoolkit::Matrix rectangle(3, 7, 10.0);
     mltoolkit::Matrix big(100, 200, -0.001);
+    ASSERT_NO_THROW(empty.sum_elements());
+    ASSERT_NO_THROW(empty.sum_of_squared_elements());
+    
     double eps = 0.0001;
     ASSERT_NEAR(blank.sum_elements(), 0.0, eps);
     ASSERT_NEAR(empty.sum_elements(), 0.0, eps);
@@ -206,12 +214,15 @@ TEST(MatrixCumulation, Sums) {
     ASSERT_NEAR(col.sum_of_squared_elements(), 45.0, eps);
     ASSERT_NEAR(square.sum_of_squared_elements(), 1.0, eps);
     ASSERT_NEAR(rectangle.sum_of_squared_elements(), 2100.0, eps);
-    ASSERT_NEAR(big.sum_of_squared_elements(), 0.02, eps);    
+    ASSERT_NEAR(big.sum_of_squared_elements(), 0.02, eps);   
 }
 
 
 
+/*
 TEST(MatrixConstructor, InitFuncConstructor) {
 
 }
+
+*/
 

@@ -6,6 +6,8 @@
 #include <utility>
 #include <stdexcept>
 #include <functional>
+#include <numeric>
+#include <execution>
 
 namespace mltoolkit {
 
