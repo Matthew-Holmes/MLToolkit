@@ -98,7 +98,7 @@ int main() {
 	trainer.set_it_limit(100);
 
 	std::cout << "running Trainer class with over 100 iteration max" << std::endl;
-#
+
 	// define the class?
 	trainer.do_training();
 	trainer.evaluate();
