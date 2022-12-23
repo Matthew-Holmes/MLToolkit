@@ -206,12 +206,39 @@ TEST(MatrixCumulation, Sums) {
     ASSERT_NEAR(col.sum_of_squared_elements(), 45.0, eps);
     ASSERT_NEAR(square.sum_of_squared_elements(), 1.0, eps);
     ASSERT_NEAR(rectangle.sum_of_squared_elements(), 2100.0, eps);
-    ASSERT_NEAR(big.sum_of_squared_elements(), 0.02, eps);    
+    ASSERT_NEAR(big.sum_of_squared_elements(), 0.02, eps);   
+
+    square.element_ij(2, 3) = 10.2;
+    ASSERT_NEAR(square.sum_of_squared_elements(), 105.0, eps);
+    ASSERT_NEAR(square.sum_elements(),15.0, eps);
+    
+
 }
 
-
-
 TEST(MatrixConstructor, InitFuncConstructor) {
+    auto f = []() {return 1.0; };
+    mltoolkit::Matrix empty(0, 0, f);
+    mltoolkit::Matrix scalar(1, 1, f);
+    mltoolkit::Matrix row(1, 10, f);
+    mltoolkit::Matrix col(5, 1, f);
+    mltoolkit::Matrix square(5, 5, f);
+    mltoolkit::Matrix rectangle(3, 7, f);
+    mltoolkit::Matrix big(100, 200, f);
+    check_entries(empty, 0, 0, 1.0);
+    check_entries(scalar, 1, 1, 1.0);
+    check_entries(row, 1, 10, 1.0);
+    check_entries(col, 5, 1, 1.0);
+    check_entries(square, 5, 5, 1.0);
+    check_entries(big, 100, 200, 1.0);
 
+    std::default_random_engine e;
+    std::uniform_real_distribution<double> u(0, 1);
+    auto rand = [&u, &e]() {return u(e); };
+    mltoolkit::Matrix random_mat(100, 100, rand);
+    double eps = 0.01; // reasonable proximity to asymptotic results given number of samples
+    ASSERT_NEAR(random_mat.sum_elements() / double(100 * 100), 0.5, eps) << "mean outside expected";
+    ASSERT_NEAR(random_mat.sum_of_squared_elements() / double(100 * 100)
+        - pow(random_mat.sum_elements() / double(100 * 100), 2.0), 1.0 / 12.0, eps)
+        << "variance outside expected";
 }
 
