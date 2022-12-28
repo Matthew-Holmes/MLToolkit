@@ -8,31 +8,10 @@ int main() {
 	auto actn_grad = [actn_func](double d) { return actn_func(d) * (1 - actn_func(d)); };
 	auto errr_grad = [](double d1, double d2) { return 2 * (d1 - d2); };
 	// mltoolkit::Matrix mat(3, 3, rand_getter);
-	mltoolkit::Matrix mat(3, 3, 1.0);
-	std::cout << "matrix with size: ";
-	std::cout << mat.size().first << " " << mat.size().second << std::endl;
-	std::cout << "so " << mat.number_of_rows() << " rows, and "
-		<< mat.number_of_cols() << " cols" << std::endl;
-	std::cout << "data is: " << std::endl;
-	mat.element_ij(1, 1) = 0.0;
-	for (int i = 0; i < mat.number_of_rows(); i++) {
-		for (int j = 0; j < mat.number_of_cols(); j++) {
-			std::cout << mat.element_ij(i, j) << " ";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << "testing matrix vector multiplication" << std::endl;
+
+
 	std::vector<double> vec{ 1.0, 2.0, 3.0 };
-	vec = mat.vec_mult(vec);
-	for (auto d : vec) {
-		std::cout << d << " ";
-	}
-	std::cout << std::endl;
-	vec = mat.transpose_vec_mult(vec);
-	for (auto d : vec) {
-		std::cout << d << " ";
-	}
-	std::cout << std::endl;
+
 
 	std::cout << "testing neural networks" << std::endl;
 	mltoolkit::NeuralNetwork nnet(std::vector<int> {3, 5, 10, 5, 3}, actn_func, rand_getter);

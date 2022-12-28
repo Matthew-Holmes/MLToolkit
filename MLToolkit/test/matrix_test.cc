@@ -242,6 +242,8 @@ TEST(MatrixConstructor, InitFuncConstructor) {
         << "variance outside expected";
 }
 
+// TODO 2nd initfunc constructor test
+
 TEST(MatrixVecMultiply, BasicTests) {
     {
         // Create a 3x3 matrix of all ones
