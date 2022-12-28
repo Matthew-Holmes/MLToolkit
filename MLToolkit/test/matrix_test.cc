@@ -243,6 +243,21 @@ TEST(MatrixConstructor, InitFuncConstructor) {
 }
 
 TEST(MatrixVecMultiply, BasicTests) {
+    {
+        // Create a 3x3 matrix of all ones
+        mltoolkit::Matrix A(3, 3, 1.0);
+        std::vector<double> x{ 1, 2, 3 };
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.vec_mult(x);
+
+        // Check the result
+        EXPECT_EQ(y.size(), 3);
+        for (int i = 0; i < 3; ++i) {
+            EXPECT_EQ(y[i], 6.0);
+        }
+    }
+
     // Chat GPT wrote this test!
     for (int i = 0; i < 10; ++i) {
         // Generate a random matrix and vector
@@ -319,6 +334,21 @@ TEST(MatrixVecMultiply, ShapeEdgeCases) {
 }
 
 TEST(MatrixTransposeVecMultiply, BasicTests) {
+    {
+        // Create a 3x3 matrix of all ones
+        mltoolkit::Matrix A(3, 3, 1.0);
+        std::vector<double> x{ 1, 2, 3 };
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.transpose_vec_mult(x);
+
+        // Check the result
+        EXPECT_EQ(y.size(), 3);
+        for (int i = 0; i < 3; ++i) {
+            EXPECT_EQ(y[i], 6.0);
+        }
+    }
+
     for (int i = 0; i < 10; ++i) {
         // Generate a random matrix and vector
         std::mt19937 gen(i);  // Seed the generator with the test number
