@@ -242,3 +242,194 @@ TEST(MatrixConstructor, InitFuncConstructor) {
         << "variance outside expected";
 }
 
+TEST(MatrixVecMultiply, BasicTests) {
+    // Chat GPT wrote this test!
+    for (int i = 0; i < 10; ++i) {
+        // Generate a random matrix and vector
+        std::mt19937 gen(i);  // Seed the generator with the test number
+        std::uniform_real_distribution<double> dist(0, 1);
+        std::function<double(void)> rand_func = [&gen, &dist]() {
+            return dist(gen);
+        };
+        int m = gen() % 10 + 1;
+        int n = gen() % 10 + 1;
+        mltoolkit::Matrix A(m, n, rand_func);
+        std::vector<double> x(n);
+        for (int k = 0; k < n; ++k) {
+            x[k] = rand_func();
+        }
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.vec_mult(x);
+
+        // Check the result
+        for (int j = 0; j < m; ++j) {
+            double expected = 0.0;
+            for (int k = 0; k < n; ++k) {
+                expected += A.element_ij(j, k) * x[k];
+            }
+            EXPECT_NEAR(y[j], expected, 1e-9);
+        }
+    }
+}
+
+TEST(MatrixVecMultiply, ShapeEdgeCases) {
+    // Test with a zero matrix
+    {
+        // Create a zero-sized matrix
+        mltoolkit::Matrix A(0, 0);
+        std::vector<double> x(0);
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.vec_mult(x);
+
+        // Check the result
+        EXPECT_EQ(y.size(), 0);
+    }
+
+    // Test the vec_mult method with a row matrix
+    {
+        // Create a row matrix
+        mltoolkit::Matrix A(1, 5, 1.0);
+        std::vector<double> x(5, 2.0);
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.vec_mult(x);
+
+        // Check the result
+        EXPECT_EQ(y.size(), 1);
+        EXPECT_EQ(y[0], 10.0);
+    }
+
+    // Test the vec_mult method with a column matrix
+    {
+        // Create a column matrix
+        mltoolkit::Matrix A(5, 1, 1.0);
+        std::vector<double> x(1, 2.0);
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.vec_mult(x);
+
+        // Check the result
+        EXPECT_EQ(y.size(), 5);
+        for (int i = 0; i < 5; ++i) {
+            EXPECT_EQ(y[i], 2.0);
+        }
+    }
+}
+
+TEST(MatrixTransposeVecMultiply, BasicTests) {
+    for (int i = 0; i < 10; ++i) {
+        // Generate a random matrix and vector
+        std::mt19937 gen(i);  // Seed the generator with the test number
+        std::uniform_real_distribution<double> dist(0, 1);
+        std::function<double(void)> rand_func = [&gen, &dist]() {
+            return dist(gen);
+        };
+        int m = gen() % 10 + 1;
+        int n = gen() % 10 + 1;
+        mltoolkit::Matrix A(m, n, rand_func);
+        std::vector<double> x(m);
+        for (int k = 0; k < m; ++k) {
+            x[k] = rand_func();
+        }
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.transpose_vec_mult(x);
+
+        // Check the result
+        for (int j = 0; j < n; ++j) {
+            double expected = 0.0;
+            for (int k = 0; k < m; ++k) {
+                expected += A.element_ij(k, j) * x[k];
+            }
+            EXPECT_NEAR(y[j], expected, 1e-9);
+        }
+    }
+}
+
+TEST(MatrixTransposeVecMultiply, ShapeEdgeCases) {
+    {
+        // Create a zero-sized matrix
+        mltoolkit::Matrix A(0, 0);
+        std::vector<double> x(0);
+
+        // Compute the transpose matrix-vector product
+        std::vector<double> y = A.transpose_vec_mult(x);
+
+        // Check the result
+        EXPECT_EQ(y.size(), 0);
+    }
+
+    // Test the transpose_vec_mult method with a row matrix
+    {
+        // Create a row matrix
+        mltoolkit::Matrix A(1, 5, 1.0);
+        std::vector<double> x(1, 2.0);
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.transpose_vec_mult(x);
+
+        // Check the result
+        EXPECT_EQ(y.size(), 5);
+        for (int i = 0; i < 5; ++i) {
+            EXPECT_EQ(y[i], 2.0);
+        }
+    }
+
+    // Test the transpose_vec_mult method with a column matrix
+    {
+        // Create a column matrix
+        mltoolkit::Matrix A(5, 1, 1.0);
+        std::vector<double> x(5, 2.0);
+
+        // Compute the matrix-vector product
+        std::vector<double> y = A.transpose_vec_mult(x);
+
+        // Check the result
+        EXPECT_EQ(y.size(), 1);
+        EXPECT_EQ(y[0], 10.0);
+    }
+}
+
+TEST(MatrixVecMultiply, MismatchShapesThrow) {
+    // Test the vec_mult method with an incompatible vector
+    {
+        // Create a matrix
+        mltoolkit::Matrix A(2, 3, 1.0);
+        std::vector<double> x(4, 2.0);
+
+        // Check that the vec_mult method throws an exception
+        EXPECT_THROW(A.vec_mult(x), std::invalid_argument);
+    }
+
+    {
+        // Create a matrix
+        mltoolkit::Matrix A(4, 2, 1.0);
+        std::vector<double> x(4, 2.0);
+
+        // Check that the vec_mult method throws an exception
+        EXPECT_THROW(A.vec_mult(x), std::invalid_argument);
+    }
+}
+
+TEST(MatrixTransposeVecMultiply, MismatchShapesThrow) {
+    // Test the transpose_vec_mult method with an incompatible vector
+    {
+        // Create a matrix
+        mltoolkit::Matrix A(2, 3, 1.0);
+        std::vector<double> x(4, 2.0);
+
+        // Check that the transpose_vec_mult method throws an exception
+        EXPECT_THROW(A.transpose_vec_mult(x), std::invalid_argument);
+    }
+
+    {
+        // Create a matrix
+        mltoolkit::Matrix A(3, 4, 1.0);
+        std::vector<double> x(4, 2.0);
+
+        // Check that the transpose_vec_mult method throws an exception
+        EXPECT_THROW(A.transpose_vec_mult(x), std::invalid_argument);
+    }
+}
