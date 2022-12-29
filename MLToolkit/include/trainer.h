@@ -11,11 +11,14 @@
 
 namespace mltoolkit {
 
+// WARNING - ModelMutator<MOD> may be getting sliced down
+
 template <typename MOD>
 class Trainer {
 public:
 	Trainer(MOD mod, std::unique_ptr<Data> train, std::unique_ptr<Data> test, int max_it = 9999999)
 		: model(mod), train_data_uptr(std::move(train)), test_data_uptr(std::move(test)), it_limit(max_it) {}
+	// constructor that takes a ModelMutator
 	Trainer(MOD mod, ModelMutator<MOD> mut,
 			std::unique_ptr<Data> train, std::unique_ptr<Data> test, int max_it = 9999999)
 		: model(mod), model_mut(mut), 
