@@ -12,3 +12,9 @@
 #include <random>
 #include <fstream>
 #include <vector>
+
+namespace mltoolkit {
+	namespace utility {
+		void makeCircleData();
+	}
+}

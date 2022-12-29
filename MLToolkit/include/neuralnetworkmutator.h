@@ -13,7 +13,7 @@ public:
 	typedef std::function<double(double, double)> xyfunc;
 	typedef std::function<double(double)>         xfunc;
 
-	NeuralNetworkMutator(xyfunc fxy = meansquared_grad, xfunc fx = logistic_grad, double d = 0.05)
+	NeuralNetworkMutator(xyfunc fxy = meansquared_grad, xfunc fx = logistic_grad, double d = 0.5)
 		: error_gradient(fxy), act_gradient(fx), learning_rate(d) {}
 
 	void delta_by_gradient(
