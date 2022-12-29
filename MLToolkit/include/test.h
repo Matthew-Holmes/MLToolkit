@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "matrix.h"
 #include "trainer.h"
 #include "neuralnetwork.h"
