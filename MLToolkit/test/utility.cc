@@ -21,7 +21,7 @@ void mltoolkit::utility::makeCircleData() {
     std::ofstream out_file("circle_data.txt");
 
     // Generate 1000 data points
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 100000; i++) {
         // Generate a random point in the 2D plane
         double x = dist_x(engine);
         double y = dist_y(engine);

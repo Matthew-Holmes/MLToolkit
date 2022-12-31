@@ -12,7 +12,9 @@ class ModelMutator {
 public:
 	virtual ~ModelMutator() = default;
 	virtual void training_mutate(
-		MOD& M, const Data::datumtype& in_out_vec_pair) { return; }
+		MOD& M, const Data::datumtype& in_out_vec_pair) {
+		std::cout << "base" << std::endl; return;
+	}
 };
 
 

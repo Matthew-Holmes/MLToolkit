@@ -11,24 +11,26 @@ using mltoolkit::utility::makeCircleData;
  
 TEST(TrainerDoTraining, ToyNeuralNetwork) {
     makeCircleData();
-    mltoolkit::NeuralNetwork nnet(std::vector<int> {2, 10, 10, 1}, actn_func, rand_getter);
+    mltoolkit::NeuralNetwork nnet(std::vector<int> {2, 30, 30, 10, 5, 1}, actn_func, rand_getter);
+    //mltoolkit::NeuralNetworkMutator nnet_mut;
 
     mltoolkit::Trainer<mltoolkit::NeuralNetwork> trainer(nnet,
+        std::unique_ptr<mltoolkit::NeuralNetworkMutator>(new mltoolkit::NeuralNetworkMutator()),
         std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData("circle_data.txt")),
         std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData("circle_data.txt")));
 
-    trainer.set_it_limit(1000);
+    trainer.set_it_limit(10000);
     trainer.do_training();
-    // trainer.evaluate();
+    trainer.evaluate();
 
     double should_be_zero = nnet.predict(std::vector<double>{0, 0})[0];
     double should_be_one = nnet.predict(std::vector<double>{-1, -1})[0];
     double max_difference = 0.05;
 
     EXPECT_THAT(0.0, ::testing::DoubleNear(should_be_zero, max_difference))
-        << "(0,0) should be class 0" << std::endl;
+        << "\n(0,0) should be class 0, in fact was:" << should_be_zero << std::endl;
 
-    EXPECT_THAT(0.0, ::testing::DoubleNear(should_be_zero, max_difference))
-        << "(-1,-1) should be class 1" << std::endl;
+    EXPECT_THAT(1.0, ::testing::DoubleNear(should_be_one, max_difference))
+        << "\n(-1,-1) should be class 1, in fact was:" << should_be_one << std::endl;
 }
 
