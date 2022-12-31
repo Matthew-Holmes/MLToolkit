@@ -19,7 +19,7 @@ TEST(TrainerDoTraining, ToyNeuralNetwork) {
         std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData("circle_data.txt")),
         std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData("circle_data.txt")));
 
-    trainer.set_it_limit(10000);
+    trainer.set_it_limit(100);
     trainer.do_training();
     trainer.evaluate();
 

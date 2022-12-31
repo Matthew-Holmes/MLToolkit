@@ -50,6 +50,14 @@ void Trainer<MOD>::do_training() {
 	std::pair<std::vector<double>, std::vector<double>> in_out_vecs;
 	int cnt = 0;
 		while (*train_data_uptr >> in_out_vecs && cnt < it_limit) {
+			/*
+			for (int i = 0; i != in_out_vecs.first.size(); i++)
+				std::cout << in_out_vecs.first[i] << " ";
+			std::cout << "| ";
+			for (int i = 0; i != in_out_vecs.second.size(); i++)
+				std::cout << in_out_vecs.second[i] << " ";
+			std::cout << std::endl;
+			*/
 			cnt++;
 			model_mut_uptr->training_mutate(model_ref, in_out_vecs);
 		}
