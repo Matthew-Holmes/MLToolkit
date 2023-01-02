@@ -20,8 +20,9 @@ NeuralNetworkMutator::logistic_grad
 
 
 void NeuralNetworkMutator::training_mutate(
-	NeuralNetwork& nnet, const Data::datumtype& vec_pair) {
-	delta_by_gradient(nnet, nnet, vec_pair.first, vec_pair.second, -learning_rate);
+	NeuralNetwork& nnet, const Data::datumtype& vec_pair, int cnt, int max_cnt) {
+	delta_by_gradient(std::ref(nnet), nnet, vec_pair.first, vec_pair.second, -learning_rate);
+		//-learning_rate * 10.0 * (1.0 - (double(cnt) / double(max_cnt))) );
 }
 
 void NeuralNetworkMutator::compute_activations(

@@ -59,7 +59,7 @@ void Trainer<MOD>::do_training() {
 			std::cout << std::endl;
 			*/
 			cnt++;
-			model_mut_uptr->training_mutate(model_ref, in_out_vecs);
+			model_mut_uptr->training_mutate(model_ref, in_out_vecs, cnt, it_limit);
 		}
 	std::cout << "trained for " << cnt << " iterations" << std::endl;
 }
