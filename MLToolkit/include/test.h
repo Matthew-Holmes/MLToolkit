@@ -17,5 +17,6 @@ namespace mltoolkit {
 	namespace utility {
 		void makeCircleData();
 		void makeTwoInputData();
+		void makeOneDimensionalData();
 	}
 }

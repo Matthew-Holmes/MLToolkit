@@ -9,6 +9,7 @@ namespace {
 
 using mltoolkit::utility::makeCircleData;
 using mltoolkit::utility::makeTwoInputData;
+using mltoolkit::utility::makeOneDimensionalData;
 
 TEST(TrainerDoTraining, OverfitsTwoData) {
     makeTwoInputData();
@@ -44,8 +45,6 @@ TEST(TrainerDoTraining, OverfitsTwoData) {
     trainer.do_training();
     trainer.evaluate();
 
-    // TODO some sort of annealing process for learning rate - right now just getting useles models
-
     actual1 = nnet.predict(invec1);
     actual2 = nnet.predict(invec2);
     max_difference = 0.05;
@@ -60,9 +59,52 @@ TEST(TrainerDoTraining, OverfitsTwoData) {
 
 }
  
+TEST(TrainerDoTraining, LearnsOneDimensionalSeparator) {
+    makeOneDimensionalData();
+    mltoolkit::NeuralNetwork nnet(std::vector<int> {1, 2, 2, 1}, actn_func, rand_getter);
+    //mltoolkit::NeuralNetworkMutator nnet_mut;
+
+    mltoolkit::Trainer<mltoolkit::NeuralNetwork> trainer(nnet,
+        std::unique_ptr<mltoolkit::NeuralNetworkMutator>(new mltoolkit::NeuralNetworkMutator()),
+        std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData("one_dimensional_data.txt")),
+        std::unique_ptr<mltoolkit::Data>(new mltoolkit::FileData("one_dimensional_data.txt")));
+
+    std::vector<double> invec1{ -0.75 };
+    std::vector<double> outvec1{ 0.0 };
+
+    std::vector<double> invec2{ 0.75 };
+    std::vector<double> outvec2{ 1.0 };
+
+    // check neural network isn't already predicting
+    // TODO handle and exception and reroll nnet?
+
+    double max_difference = 0.0001;
+
+    std::vector<double> actual1 = nnet.predict(invec1);
+    EXPECT_THAT(actual1[0], ::testing::Not(::testing::DoubleNear(outvec1[0], max_difference)));
+
+    std::vector<double> actual2 = nnet.predict(invec2);
+    EXPECT_THAT(actual2[0], ::testing::Not(::testing::DoubleNear(outvec2[0], max_difference)));
+
+    trainer.set_it_limit(10000);
+    trainer.do_training();
+    trainer.evaluate();
+
+    actual1 = nnet.predict(invec1);
+    actual2 = nnet.predict(invec2);
+    max_difference = 0.05;
+
+    // check that now it predicts them correctly
+
+    EXPECT_THAT(actual1[0], ::testing::DoubleNear(outvec1[0], max_difference))
+        << "datum 1 entry: not fitted for" << std::endl;
+    EXPECT_THAT(actual2[0], ::testing::DoubleNear(outvec2[0], max_difference))
+        << "datum 2 entry: not fitted for" << std::endl;
+}
+
 TEST(TrainerDoTraining, ToyNeuralNetwork) {
     makeCircleData();
-    mltoolkit::NeuralNetwork nnet(std::vector<int> {2, 8, 32, 64, 32, 8, 2}, actn_func, rand_getter);
+    mltoolkit::NeuralNetwork nnet(std::vector<int> {2, 4, 4, 2}, actn_func, rand_getter);
     //mltoolkit::NeuralNetworkMutator nnet_mut;
 
     mltoolkit::Trainer<mltoolkit::NeuralNetwork> trainer(nnet,
