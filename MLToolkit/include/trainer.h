@@ -3,6 +3,7 @@
 
 #include "model.h"
 #include "modelmutator.h"
+#include "neuralnetworkmutator.h"
 #include "data.h"
 
 #include <utility>
@@ -16,20 +17,27 @@ namespace mltoolkit {
 template <typename MOD>
 class Trainer {
 public:
-	Trainer(MOD mod, std::unique_ptr<Data> train, std::unique_ptr<Data> test, int max_it = 9999999)
-		: model(mod), train_data_uptr(std::move(train)), test_data_uptr(std::move(test)), it_limit(max_it) {}
+	Trainer(MOD& mod, std::unique_ptr<Data> train, std::unique_ptr<Data> test, int max_it = 9999999)
+		: model_ref(std::ref(mod)),
+		  model_mut_uptr(std::make_unique<ModelMutator<MOD>>()),
+		  train_data_uptr(std::move(train)),
+		  test_data_uptr(std::move(test)),
+		  it_limit(max_it) {}
 	// constructor that takes a ModelMutator
-	Trainer(MOD mod, ModelMutator<MOD> mut,
-			std::unique_ptr<Data> train, std::unique_ptr<Data> test, int max_it = 9999999)
-		: model(mod), model_mut(mut), 
-		  train_data_uptr(std::move(train)), test_data_uptr(std::move(test)), it_limit(max_it) {}
+	Trainer(MOD& mod, std::unique_ptr<ModelMutator<MOD>> mut_uptr, std::unique_ptr<Data> train,
+		    std::unique_ptr<Data> test, int max_it = 9999999)
+		: model_ref(std::ref(mod)),
+		  model_mut_uptr(std::move(mut_uptr)),
+		  train_data_uptr(std::move(train)),
+		  test_data_uptr(std::move(test)),
+		  it_limit(max_it) {}
 
 	void do_training();
 	void evaluate();
 	void set_it_limit(int max_it) { it_limit = max_it; }
 private:
-	MOD model; // works on a copy of the model passed
-	ModelMutator<MOD> model_mut;
+	MOD& model_ref; // works on a copy of the model passed
+	std::unique_ptr<ModelMutator<MOD>> model_mut_uptr;
 	std::unique_ptr<Data> train_data_uptr;
 	std::unique_ptr<Data> test_data_uptr;
 	int it_limit;
@@ -43,7 +51,7 @@ void Trainer<MOD>::do_training() {
 	int cnt = 0;
 		while (*train_data_uptr >> in_out_vecs && cnt < it_limit) {
 			cnt++;
-			model_mut.training_mutate(model, in_out_vecs);
+			model_mut_uptr->training_mutate(model_ref, in_out_vecs);
 		}
 	std::cout << "trained for " << cnt << " iterations" << std::endl;
 }
@@ -56,7 +64,7 @@ void Trainer<MOD>::evaluate() {
 	int cnt = 0; double total_error = 0.0; // for average error
 
 	while (*test_data_uptr >> test_pair && cnt < it_limit) {
-		predicted = model.predict(test_pair.first);
+		predicted = model_ref.predict(test_pair.first);
 		auto it1 = predicted.begin();
 		auto it2 = test_pair.second.begin();
 		while (	it1 != predicted.end()) {
