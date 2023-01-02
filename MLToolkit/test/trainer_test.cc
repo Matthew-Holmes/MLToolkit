@@ -61,7 +61,7 @@ TEST(TrainerDoTraining, OverfitsTwoData) {
  
 TEST(TrainerDoTraining, LearnsOneDimensionalSeparator) {
     makeOneDimensionalData();
-    mltoolkit::NeuralNetwork nnet(std::vector<int> {1, 2, 2, 1}, actn_func, rand_getter);
+    mltoolkit::NeuralNetwork nnet(std::vector<int> {1, 3, 1}, actn_func, rand_getter);
     //mltoolkit::NeuralNetworkMutator nnet_mut;
 
     mltoolkit::Trainer<mltoolkit::NeuralNetwork> trainer(nnet,
@@ -102,9 +102,11 @@ TEST(TrainerDoTraining, LearnsOneDimensionalSeparator) {
         << "datum 2 entry: not fitted for" << std::endl;
 }
 
+// TODO two dimensional linear separator
+
 TEST(TrainerDoTraining, ToyNeuralNetwork) {
     makeCircleData();
-    mltoolkit::NeuralNetwork nnet(std::vector<int> {2, 4, 4, 2}, actn_func, rand_getter);
+    mltoolkit::NeuralNetwork nnet(std::vector<int> {2, 100, 2}, actn_func, rand_getter);
     //mltoolkit::NeuralNetworkMutator nnet_mut;
 
     mltoolkit::Trainer<mltoolkit::NeuralNetwork> trainer(nnet,
