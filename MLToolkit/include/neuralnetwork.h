@@ -21,8 +21,11 @@ public:
 	NeuralNetwork() = default;
 	NeuralNetwork(std::vector<int> top, std::function<double(double)> act,
 		std::function<double(void)> init);
+	NeuralNetwork(std::vector<int> top, std::function<double(double)> act,
+		std::function<double(int, int)> init);
 	std::vector<double> predict(const std::vector<double>& in_vec) override
 		{ return feed_forward(in_vec); }
+	std::vector<Matrix>& get_weights() { return weights; }
 private:
 	std::vector<Matrix> weights;
 	std::vector<int> topology;

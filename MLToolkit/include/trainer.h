@@ -3,6 +3,7 @@
 
 #include "model.h"
 #include "modelmutator.h"
+#include "neuralnetworkmutator.h"
 #include "data.h"
 
 #include <utility>
@@ -15,6 +16,8 @@
 
 
 namespace mltoolkit {
+
+// WARNING - ModelMutator<MOD> may be getting sliced down
 
 template <typename MOD>
 class Trainer;
@@ -38,19 +41,27 @@ template <typename MOD>
 class Trainer {
 	friend class ListenerTask<MOD>;
 public:
-	Trainer(MOD mod, std::unique_ptr<Data> train, std::unique_ptr<Data> test, int max_it = 9999999)
-		: model(mod), train_data_uptr(std::move(train)), test_data_uptr(std::move(test)), it_limit(max_it) {}
-	Trainer(MOD mod, ModelMutator<MOD> mut,
-			std::unique_ptr<Data> train, std::unique_ptr<Data> test, int max_it = 9999999)
-		: model(mod), model_mut(mut), 
-		  train_data_uptr(std::move(train)), test_data_uptr(std::move(test)), it_limit(max_it) {}
+	Trainer(MOD& mod, std::unique_ptr<Data> train, std::unique_ptr<Data> test, int max_it = 9999999)
+		: model_ref(std::ref(mod)),
+		  model_mut_uptr(std::make_unique<ModelMutator<MOD>>()),
+		  train_data_uptr(std::move(train)),
+		  test_data_uptr(std::move(test)),
+		  it_limit(max_it) {}
+	// constructor that takes a ModelMutator
+	Trainer(MOD& mod, std::unique_ptr<ModelMutator<MOD>> mut_uptr, std::unique_ptr<Data> train,
+		    std::unique_ptr<Data> test, int max_it = 9999999)
+		: model_ref(std::ref(mod)),
+		  model_mut_uptr(std::move(mut_uptr)),
+		  train_data_uptr(std::move(train)),
+		  test_data_uptr(std::move(test)),
+		  it_limit(max_it) {}
 
 	void do_training();
 	void evaluate(int limit = 0);
 	void set_it_limit(int max_it) { it_limit = max_it; }
 private:
-	MOD model; // works on a copy of the model passed
-	ModelMutator<MOD> model_mut;
+	MOD& model_ref; // works on a copy of the model passed
+	std::unique_ptr<ModelMutator<MOD>> model_mut_uptr;
 	std::unique_ptr<Data> train_data_uptr;
 	std::unique_ptr<Data> test_data_uptr;
 	int it_limit;
@@ -74,7 +85,7 @@ void Trainer<MOD>::do_training() {
 		while (*train_data_uptr >> in_out_vecs && cnt < it_limit) {
 			if (!lock.owns_lock()) lock.lock(); // only continue if the model data is ok to modify
 			cnt++;
-			model_mut.training_mutate(model, in_out_vecs);
+			model_mut_uptr->training_mutate(model_ref, in_out_vecs, cnt, it_limit);
 			lock.unlock();
 		}
 	std::cout << "trained for " << cnt << " iterations" << std::endl;
@@ -88,9 +99,9 @@ void Trainer<MOD>::evaluate(int limit) {
 	std::vector<double> predicted;
 
 	int cnt = 0; double total_error = 0.0; // for average error
-	if (limit == 0) limit = it_limit; // data member it limit
-	while (*test_data_uptr >> test_pair && cnt < limit) {
-		predicted = model.predict(test_pair.first);
+
+	while (*test_data_uptr >> test_pair && cnt < it_limit) {
+		predicted = model_ref.predict(test_pair.first);
 		auto it1 = predicted.begin();
 		auto it2 = test_pair.second.begin();
 		while (	it1 != predicted.end()) {
@@ -121,7 +132,7 @@ void ListenerTask<MOD>::operator() () const
 			}
 			else if (s == "Y" || s == "y") {
 				std::unique_lock<std::mutex> lock(model_mutex);
-				Trainer<MOD> tmp(trainer.model, nullptr, std::move(trainer.test_data_uptr)); // copies model data at this point in time
+				Trainer<MOD> tmp(trainer.model_ref, nullptr, std::move(trainer.test_data_uptr)); // copies model data at this point in time
 				lock.unlock(); // now the training can continue
 				std::cout << "evaluating on 100 datapoints" << std::endl;
 				tmp.evaluate(100);
